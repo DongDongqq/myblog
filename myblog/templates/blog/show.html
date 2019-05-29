@@ -1,0 +1,71 @@
+﻿{% extends "blog/base.html" %}
+{% block content %}
+        <!-- /主体 -->
+    <div id="main-container" class="container clearfix">
+        <section class="post-left">
+            <div class="breadcrumb">您的位置： <a itemprop="breadcrumb" href="{% url 'blog:home' %}">首页</a> » <a
+                    href="{% url 'blog:list' %}?lid={{ category.id }}">{{ category }}</a> »
+                <span class="current">正文</span></div>
+            <div class="post-main clearfix">
+                <h1 class="post-title">{{ article.title}}</h1>
+                <div class="post-con clearfix">
+                    <div class="article-meta">
+                        <span class="item">分类：<a href="{% url 'blog:list' %}?lid={{ category.id }}" rel="category tag">{{ category }}</a></span>
+                        <span class="item">作者：{{ article.user }}</span>
+                        <span class="item">浏览：{{ article.views }}</span>
+                        <span class="item">{{ article.created }}</span>
+
+                    </div>
+                    <article class="article-content">
+                         {% autoescape off %}
+                             <p>{{ article.body }}</p>
+                         {% endautoescape %}
+                    </article>
+
+                    <div class="post-tag"><span class="fa fa-tags" aria-hidden="true"></span>标签：
+                        {% for tagitem in tag %}
+                            <a href="{% url 'blog:tag' %}?tid={{ tagitem.id }}" rel="tag">{{ tagitem.name }}</a>
+                        {% endfor %}
+
+                    </div>
+                    <div>
+                        <div><b>上一篇：</b>
+                            <a href="{% url "blog:show" %}?tid={{ provious_blog.id }}&cid={{ article.category_id }}" class="article-tag">{{ provious_blog }}</a>
+                        </div>
+                        <div><b>下一篇：</b>
+
+                                <a href="{% url "blog:show" %}?tid={{ next_blog.id }}&cid={{ article.category_id }}" class="article-tag">{{ next_blog }}</a>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /文章 -->
+
+
+            <div class="recommend  hidden-xs">
+                <div class="head clearfix"><span class="sp">您可能感兴趣的:</span></div>
+                <ul>
+                    {% for tagitem in eqtag_article %}
+                        <li>
+                            <div class="pic">
+                                <a href="{% url "blog:show" %}?tid={{ tagitem.id }}&cid={{ tagitem.category_id }}" title="{{ tagitem.title }}"><img
+                                        src="/static/picture/quora.png"
+                                        srcset="/media/{{ tagitem.img }}"
+                                        alt="{{ tagitem.title }}" class="wp-post-image" width="145"
+                                        height="100"/></a>
+                            </div>
+                            <a class="descript " href="href="{% url "blog:show" %}?tid={{ tagitem.id }}&cid={{ tagitem.category_id }}" rel="bookmark"
+                               title="{{ tagitem.title }}">{{ tagitem.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <!-- /post-left -->
+        <!-- /post-right -->
+        {% include 'blog/right.html' %}
+    </div>
+    <!-- /主体 -->
+{% endblock %}
